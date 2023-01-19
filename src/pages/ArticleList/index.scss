@@ -1,0 +1,15 @@
+.articleList {
+  margin-top: 100px;
+
+  ul {
+    li {
+      color: #409eff;
+      list-style: none;
+      cursor: pointer;
+
+      &:hover {
+        color: blue;
+      }
+    }
+  }
+}

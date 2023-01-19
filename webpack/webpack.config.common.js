@@ -2,7 +2,7 @@
  * Author  rhys.zhao
  * Date  2022-08-16 10:14:56
  * LastEditors  rhys.zhao
- * LastEditTime  2022-08-17 16:47:08
+ * LastEditTime  2022-09-05 17:47:08
  * Description webpack通用环境配置
  */
 const path = require("path");
@@ -10,6 +10,8 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PurgecssPlugin = require("purgecss-webpack-plugin");
+const glob = require("glob"); // 文件匹配模式
 
 module.exports = {
   entry: {
@@ -23,7 +25,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/i,
-        include: path.resolve(__dirname, "../src"),
+        exclude: /node_modules/,
         use: [
           {
             loader: "babel-loader",
@@ -31,25 +33,31 @@ module.exports = {
               cacheDirectory: true
             }
           }
-          // 'eslint-loader'
         ]
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, "css-loader"]
+        exclude: /node_modules/,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
+        sideEffects: true
       },
       {
         test: /\.(scss|sass)$/i,
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
-              modules: true
+              modules: {
+                mode: "local",
+                localIdentName: "[path][name]__[local]--[hash:base64:5]"
+              }
             }
           },
           "sass-loader"
-        ]
+        ],
+        sideEffects: true
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -86,12 +94,12 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: [".js", ".jsx", ".json"],
+    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
     alias: {
       "@": path.resolve(__dirname, "../src/")
     },
     mainFiles: ["index"], // 解析目录使用的文件名
-    modules: ["node_modules"], // modules 模块对应的目录
+    modules: [path.resolve(__dirname, "../src"), "node_modules"], // 解析模块时应该搜索的目录
     cacheWithContext: false,
     symlinks: false
   }
