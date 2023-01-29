@@ -2,30 +2,27 @@
  * Author  rhys.zhao
  * Date  2022-08-16 10:14:56
  * LastEditors  rhys.zhao
- * LastEditTime  2022-09-05 17:47:08
+ * LastEditTime  2023-01-29 13:57:16
  * Description webpack通用环境配置
  */
-const path = require("path");
+const { resolve } = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const PurgecssPlugin = require("purgecss-webpack-plugin");
-const glob = require("glob"); // 文件匹配模式
 
 module.exports = {
   entry: {
     index: "./src/index.js"
   },
   output: {
-    path: path.resolve(__dirname, "../dist"),
+    path: resolve(__dirname, "../dist"),
     clean: true
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/i,
-        exclude: /node_modules/,
+        include: [resolve(__dirname, "../src"), resolve(__dirname, "../config")],
         use: [
           {
             loader: "babel-loader",
@@ -36,31 +33,8 @@ module.exports = {
         ]
       },
       {
-        test: /\.css$/i,
-        exclude: /node_modules/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
-        sideEffects: true
-      },
-      {
-        test: /\.(scss|sass)$/i,
-        exclude: /node_modules/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: "css-loader",
-            options: {
-              modules: {
-                mode: "local",
-                localIdentName: "[path][name]__[local]--[hash:base64:5]"
-              }
-            }
-          },
-          "sass-loader"
-        ],
-        sideEffects: true
-      },
-      {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        include: resolve(__dirname, "../src"),
         type: "asset",
         parser: {
           dataUrlCondition: {
@@ -70,6 +44,7 @@ module.exports = {
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        include: resolve(__dirname, "../src"),
         type: "asset/resource",
         generator: {
           filename: "fonts/[contenthash:10].png"
@@ -88,18 +63,15 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [{ from: "config/env.config.js", to: "config/env.config.js" }]
-    }),
-    new MiniCssExtractPlugin({
-      filename: "styles/[name]-[contenthash:10].css"
     })
   ],
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
     alias: {
-      "@": path.resolve(__dirname, "../src/")
+      "@": resolve(__dirname, "../src/")
     },
     mainFiles: ["index"], // 解析目录使用的文件名
-    modules: [path.resolve(__dirname, "../src"), "node_modules"], // 解析模块时应该搜索的目录
+    modules: [resolve(__dirname, "../src"), "node_modules"], // 解析模块时应该搜索的目录
     cacheWithContext: false,
     symlinks: false
   }

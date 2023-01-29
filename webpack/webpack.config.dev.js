@@ -2,28 +2,56 @@
  * Author  rhys.zhao
  * Date  2022-08-16 10:14:56
  * LastEditors  rhys.zhao
- * LastEditTime  2022-09-05 17:47:45
+ * LastEditTime  2023-01-29 14:12:01
  * Description webpack开发环境配置
  */
 const { resolve } = require("path");
 const ESLintPlugin = require("eslint-webpack-plugin");
 
-module.exports = {
-  target: "web",
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+
+const smp = new SpeedMeasurePlugin();
+
+module.exports = smp.wrap({
   output: {
     path: resolve(__dirname, "../dist"),
-    clean: true,
-    filename: "scripts/[name]-[contenthash:10].js",
-    assetModuleFilename: "images/[name]-[contenthash:10][ext]"
+    clean: true
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        include: resolve(__dirname, "../src"),
+        use: ["style-loader", "css-loader"],
+        sideEffects: true
+      },
+      {
+        test: /\.(scss|sass)$/i,
+        include: resolve(__dirname, "../src"),
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: {
+                mode: "local",
+                localIdentName: "[path][name]__[local]--[hash:base64:5]"
+              }
+            }
+          },
+          "sass-loader"
+        ],
+        sideEffects: true
+      }
+    ]
   },
   devtool: "eval-cheap-module-source-map",
   devServer: {
-    // static: resolve(__dirname, "../public"),
+    static: "../dist",
     open: true,
     compress: true,
     host: "127.0.0.1",
     port: 10000,
-    hot: true,
     // proxy: {
     //   "/api": "http://localhost:6000"
     // },
@@ -47,4 +75,4 @@ module.exports = {
     usedExports: true
   },
   mode: "development"
-};
+});

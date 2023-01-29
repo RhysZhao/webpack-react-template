@@ -2,7 +2,7 @@
  * Author  rhys.zhao
  * Date  2022-08-18 10:36:52
  * LastEditors  rhys.zhao
- * LastEditTime  2023-01-19 10:55:31
+ * LastEditTime  2023-01-29 11:35:21
  * Description eslint配置
  */
 module.exports = {
@@ -45,7 +45,7 @@ module.exports = {
     // "max-nested-callbacks": ["error", 6],
     // "no-undef": "error",
     // "no-tabs": "warn",
-    // "no-console": ["warn", { allow: ["error"] }], // 警告未删除的console
+    "no-console": ["warn", { allow: ["error"] }], // 警告未删除的console
     // "no-lone-blocks": "error",
     "no-unused-vars": "warn"
     // "no-useless-escape": "warn",
