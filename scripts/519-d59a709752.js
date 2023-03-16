@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[519],{519:(n,s,e)=>{e.r(s),e.d(s,{default:()=>a});var u=e(294);const m={home:"src-pages-Home-index__home--fSlB7"};var o=function(){return u.createElement("div",{className:m.home},"\u8FD9\u91CC\u662FHome\u9875\u9762")};const a=o}}]);
