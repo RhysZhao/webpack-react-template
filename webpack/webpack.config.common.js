@@ -2,7 +2,7 @@
  * Author  rhys.zhao
  * Date  2022-08-16 10:14:56
  * LastEditors  rhys.zhao
- * LastEditTime  2023-01-29 13:57:16
+ * LastEditTime  2023-09-07 17:32:42
  * Description webpack通用环境配置
  */
 const { resolve } = require("path");
@@ -23,14 +23,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/i,
         include: [resolve(__dirname, "../src"), resolve(__dirname, "../config")],
-        use: [
-          {
-            loader: "babel-loader",
-            options: {
-              cacheDirectory: true
-            }
-          }
-        ]
+        use: ["swc-loader"]
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -66,12 +59,12 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+    extensions: [".js", ".jsx", ".json"],
     alias: {
       "@": resolve(__dirname, "../src/")
     },
     mainFiles: ["index"], // 解析目录使用的文件名
-    modules: [resolve(__dirname, "../src"), "node_modules"], // 解析模块时应该搜索的目录
+    modules: [resolve(__dirname, "../node_modules")], // 解析模块时应该搜索的目录
     cacheWithContext: false,
     symlinks: false
   }

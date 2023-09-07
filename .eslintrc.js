@@ -2,26 +2,19 @@
  * Author  rhys.zhao
  * Date  2022-08-18 10:36:52
  * LastEditors  rhys.zhao
- * LastEditTime  2023-01-29 11:35:21
+ * LastEditTime  2023-09-07 19:47:45
  * Description eslint配置
  */
 module.exports = {
-  // 特定项目下，不再检索上级目录
   root: true,
   env: {
     browser: true,
-    es6: true,
     node: true,
-    amd: true
+    es6: true,
+    es2020: true
   },
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    // eslint-config-prettier的缩写
-    "prettier"
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
   plugins: ["react"],
-  parser: "@babel/eslint-parser",
   // 解析器选项
   parserOptions: {
     sourceType: "module",
